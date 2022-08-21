@@ -13,7 +13,8 @@ from random import randint
 class Generator:
     @staticmethod
     def generate(count: int):
-        return [randint(1,9) for _ in range(count)]
+        return [randint(1, 9) for _ in range(count)]
+
 
 class Splitter:
     @staticmethod
@@ -66,5 +67,21 @@ class Verifier:
 
 class MagicSquareGenerator:
     # СДЕЛАТЬ: реализовать простой интерфейс для сборки и проверки магического квадрата
-    pass
+    def __init__(self, size: int):
+        self.size = size
+        self.row_1, self.row_2 = self._generate()
 
+    def _generate(self):
+        while True:
+            row_1 = Generator().generate(self.size)
+            row_2 = Generator().generate(self.size)
+            item = Splitter().split([row_1, row_2])
+            if Verifier().verify(item):
+                return row_1, row_2
+
+    def __str__(self):
+        return f'{self.row_1}\n{self.row_2}'
+
+
+ms = MagicSquareGenerator(2)
+print(ms)
