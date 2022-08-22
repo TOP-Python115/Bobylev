@@ -69,19 +69,28 @@ class MagicSquareGenerator:
     # СДЕЛАТЬ: реализовать простой интерфейс для сборки и проверки магического квадрата
     def __init__(self, size: int):
         self.size = size
-        self.row_1, self.row_2 = self._generate()
+        self.rows = self._generate()
+        self.__max_wd = max(max(len(str(el)) for el in row) for row in self.rows) + 1
 
     def _generate(self):
         while True:
-            row_1 = Generator().generate(self.size)
-            row_2 = Generator().generate(self.size)
-            item = Splitter().split([row_1, row_2])
+            rows = []
+            for _ in range(self.size):
+                rows += [Generator().generate(self.size)]
+            item = Splitter().split(rows)
             if Verifier().verify(item):
-                return row_1, row_2
+                return rows
 
     def __str__(self):
-        return f'{self.row_1}\n{self.row_2}'
+        ret = ''
+        for row in self.rows:
+            ret += ''.join(f'{el:>{self.__max_wd}}' for el in row) + '\n'
+        return ret[:-1]
 
 
-ms = MagicSquareGenerator(2)
+ms = MagicSquareGenerator(3)
 print(ms)
+
+# 2 3 4
+# 5 3 1
+# 2 3 4
